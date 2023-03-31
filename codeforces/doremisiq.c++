@@ -11,11 +11,11 @@
 
 #define fl(i, n) for (int i = 0; i < n; i++)
 #define rl(i, m, n) for (int i = n; i >= m; i--)
-#define take_the_array_INT(x, o, n)
-for (int i = o; i <= n; i++)
-{
-    scanf("%d", &x[i]);
-}
+#define take_the_array_INT(x, o, n) \
+    for (int i = o; i <= n; i++)    \
+    {                               \
+        scanf("%d", &x[i]);         \
+    }
 #define int_in2(x, y) scanf("%d %d", &x, &y)
 #define int_out(x) printf("%d", x)
 #define all(x) x.begin(), x.end()
@@ -47,20 +47,44 @@ int len(int x)
 
 void solve()
 {
-    ll ans = 0;
-    ll n, x;
-    cin >> n >> x;
-    map<ll, ll> m;
-    for (ll i = 0; i < n; i++)
+    ll n, q, i, j, q1;
+    cin >> n >> q;
+
+    ll a[n], b[n];
+
+    q1 = 0;
+
+    for (i = 0; i < n; i++)
     {
-        ll x;
-        cin >> x;
-        m[x]++;
+        cin >> a[i];
     }
-    for (auto it : m)
-        while ((it.second)--)
-            m[x * it.first] ? m[x * it.first]-- : ans++;
-    cout << ans << endl;
+
+    for (i = n - 1; i >= 0; i--)
+    {
+        if (q1 >= a[i])
+        {
+            b[i] = 1;
+        }
+        else
+        {
+            if (q1 < q)
+            {
+                q1++;
+                b[i] = 1;
+            }
+            else
+            {
+                b[i] = 0;
+            }
+        }
+    }
+
+    for (i = 0; i < n; i++)
+    {
+        cout << b[i] << "";
+    }
+
+    cout << "\n";
 }
 int main()
 {
