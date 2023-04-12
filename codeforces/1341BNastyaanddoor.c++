@@ -40,45 +40,37 @@ ll gcd(ll a, ll b)
 
 void solve()
 {
-    int n;
-    cin >> n;
+    ll n, k;
+    cin >> n >> k;
+    ll a[n + 2];
+    for (ll i = 1; i <= n; i++)
+        cin >> a[i];
 
-    pair<ll, ll> arr[n];
-    for (int i = 0; i < n; i++)
+    ll mi = 1;
+    ll mp = 0;
+
+    for (ll i = 2; i < k; i++)
     {
-        cin >> arr[i].ff;
-        arr[i].ss = i;
+        if (a[i] > a[i - 1] && a[i] > a[i + 1])
+            mp++;
     }
-
-    sort(arr, arr + n);
-
-    ll time = 0;
-    int ans[n];
-    int idx = 1;
-    for (int i = n - 1; i >= 0; i -= 2)
+    ll lp = mp;
+    for (ll i = k + 1; i <= n; i++)
     {
-        ll temp = 2 * idx;
-        time = time + (arr[i].ff) * temp;
-        ans[arr[i].ss] = idx;
+        ll p = lp;
+        if (a[i - k + 1] > a[i - k] && a[i - k + 1] > a[i - k + 2])
+            p--;
+        if (a[i - 1] > a[i - 2] && a[i - 1] > a[i])
+            p++;
 
-        idx++;
+        if (p > mp)
+        {
+            mp = p;
+            mi = i - k + 1;
+        }
+        lp = p;
     }
-
-    idx = -1;
-    for (int i = n - 2; i >= 0; i -= 2)
-    {
-        int temp = 2 * abs(idx);
-        time = time + (arr[i].ff) * temp;
-        ans[arr[i].ss] = idx;
-
-        idx--;
-    }
-
-    cout << time << endl;
-    cout << 0 << ' ';
-    for (int i = 0; i < n; i++)
-        cout << ans[i] << ' ';
-    cout << endl;
+    cout << mp + 1 << " " << mi << endl;
 }
 int main()
 {
