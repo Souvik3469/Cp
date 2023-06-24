@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #include <bits/stdc++.h>
 #include <cmath>
 
@@ -90,7 +89,6 @@ int main()
 
     return 0;
 }
-=======
 #include <bits/stdc++.h>
 #include <cmath>
 
@@ -182,4 +180,3 @@ int main()
 
     return 0;
 }
->>>>>>> 67257e67c140125c05f1ae87f7e7d9b33aa1c01b
