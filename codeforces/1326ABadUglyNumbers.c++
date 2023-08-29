@@ -13,7 +13,7 @@
 #define ss second
 
 using namespace std;
-
+// func
 bool iss(char ch)
 {
 
