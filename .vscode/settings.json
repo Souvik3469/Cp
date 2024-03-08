@@ -11,6 +11,13 @@
     "vector": "cpp",
     "xstring": "cpp",
     "xtree": "cpp",
-    "xutility": "cpp"
+    "xutility": "cpp",
+    "ostream": "cpp",
+    "chrono": "cpp",
+    "complex": "cpp",
+    "array": "cpp",
+    "list": "cpp",
+    "random": "cpp",
+    "map": "cpp"
   }
 }
