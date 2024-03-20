@@ -1,0 +1,344 @@
+#include <bits/stdc++.h>
+#include <cmath>
+
+#define ll long long
+#define ull unsigned long long
+#define pb push_back
+// #define mod 1000000007
+#define fastread() (ios_base::sync_with_stdio(false), cin.tie(NULL));
+#define in_range(i, x, y) for (int i = x; i <= y; i++)
+#define in_range_back(i, x, y) for (int i = y; i >= x; i--)
+
+#define ff first
+#define ss second
+
+using namespace std;
+
+bool iss(char ch)
+{
+
+    if (ch > 'a' && ch < 'z')
+        return true;
+    else
+        return false;
+}
+bool isc(char ch)
+{
+
+    if (ch > 'A' && ch < 'Z')
+        return true;
+    else
+        return false;
+}
+bool issorted(vector<ll> &b, int n)
+{
+    for (int i = 0; i < n - 1; i++)
+    {
+        if (b[i] > b[i + 1])
+            return false;
+    }
+    return true;
+}
+bool isr(string a, string b)
+{
+    int n = a.length();
+    int m = b.length();
+    if (n != m)
+        return false;
+    int i = 0;
+    int j = m - 1;
+    while (i < n && j >= 0)
+    {
+        if (a[i] != b[j])
+            return false;
+        i++;
+        j--;
+    }
+    return true;
+}
+
+bool ispal(string s)
+{
+    int i = 0;
+    int j = s.length() - 1;
+    while (i < j)
+    {
+        if (s[i] != s[j])
+            return false;
+        i++;
+        j--;
+    }
+    return true;
+}
+
+bool seive(int n)
+{
+    bool prime[n + 1];
+    memset(prime, true, sizeof(prime));
+
+    for (int p = 2; p * p <= n; p++)
+    {
+
+        if (prime[p] == true)
+        {
+
+            for (int i = p * p; i <= n; i += p)
+                prime[i] = false;
+        }
+    }
+    for (int p = 2; p <= n; p++)
+    {
+        if (prime[p])
+            return true;
+    }
+
+    return false;
+}
+bool comp(pair<ll, ll> &p1, pair<ll, ll> &p2)
+{
+    if (p1.ff > p2.ff)
+        return true;
+    else if (p1.ff < p2.ff)
+        return false;
+    else
+        return p1.ss < p2.ss;
+}
+bool ispeak(deque<ll> &dq)
+{
+
+    vector<ll> a;
+    while (!dq.empty())
+    {
+        a.pb(dq.front());
+        dq.pop_front();
+    }
+    // for(auto x:a)
+    // cout<<x<<"*";
+    // cout<<endl;
+    int idx = -1;
+    int n = a.size();
+    ll mx = *max_element(a.begin(), a.end());
+    for (int i = 0; i < n; i++)
+    {
+        if (a[i] = mx)
+        {
+            idx = i;
+            break;
+        }
+    }
+    for (int i = 0; i < idx; i++)
+    {
+        if (a[i] > mx)
+            return false;
+    }
+    for (int i = idx + 1; i < n; i++)
+    {
+        if (a[i] > mx)
+            return false;
+    }
+    return true;
+}
+
+void solve()
+{
+
+    /*
+  int q=0;
+  int a=0;
+  stack<char>st;
+  // st.push(s[0]);
+
+  for(int i=0;i<n;i++){
+
+      if(s[i]=='A'&&st.top()=='Q')
+      st.pop();
+      else if(s[i]=='Q')
+      st.push(s[i]);
+      else if(s[i]=='A'&&st.empty())
+      continue;
+  }
+
+  for(int i=0;i<n;i++){
+      if(s[i]=='Q')
+      q++;
+      else
+      a++;
+
+
+  }
+  if(st.empty())
+  cout<<"Yes"<<endl;
+  else
+  cout<<"No"<<endl;
+  */
+
+    /*int n;
+    cin>>n;
+
+    vector<int>a(n);
+    for(int i=0;i<n;i++)
+    cin>>a[i];
+    */
+
+    ll n;
+    cin >> n;
+    vector<ll> a(n);
+
+    for (int i = 0; i < n; i++)
+    {
+        cin >> a[i];
+    }
+
+    ll p = 0;
+    ll ne = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (a[i] >= 0)
+        {
+            p++;
+        }
+        else
+        {
+            ne++;
+        }
+    }
+
+    int temp = 0;
+    int idx = 0;
+    unordered_map<int, int> mp;
+
+    for (auto x : a)
+        mp[x]++;
+
+    ll mx = *max_element(a.begin(), a.end());
+    ll mn = *min_element(a.begin(), a.end());
+
+    if (mx == mn)
+    {
+        cout << 0 << endl;
+        return;
+    }
+
+    if (n == 1)
+    {
+        cout << 0 << endl;
+        return;
+    }
+    vector<pair<ll, ll>> ans;
+    if (mn == 0)
+    {
+        cout << n - 1 << endl;
+        for (int i = 0; i < n - 1; i++)
+        {
+            cout << i + 2 << " " << i + 1 << endl;
+        }
+        return;
+    }
+    if (mx == 0)
+    {
+        cout << n - 1 << "\n";
+        for (int i = n - 2; i >= 0; i--)
+        {
+            cout << i + 1 << " " << i + 2 << "\n";
+        }
+        return;
+    }
+
+    int x = abs(mn);
+    int mxi = 0;
+    int mni = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (a[i] == mx)
+        {
+            mxi = i + 1;
+        }
+    }
+    for (int i = 0; i < n; i++)
+    {
+        if (a[i] == mn)
+        {
+            mni = i + 1;
+        }
+    }
+
+    if (mx >= x)
+    {
+
+        for (int i = 0; i < n; i++)
+        {
+            if (mx != a[i] && a[i] < 0)
+            {
+                // cout<<i+1<<"*"<<mxi<<endl;
+                ans.pb({i + 1, mxi});
+                a[i] += mx;
+            }
+        }
+        //   for(int i=n-1;i>=0;i--){
+        //     if(mn!=a[i] && a[i]>0){
+
+        //         res.pb({i+1,mni});
+        //         a[i]+=mn;
+        //     }
+        // }
+        for (int i = 0; i < n - 1; i++)
+        {
+            ans.pb({i + 2, i + 1});
+        }
+        int sz = ans.size();
+        cout << sz << endl;
+        for (int i = 0; i < sz; i++)
+        {
+            auto xx = ans[i].ff;
+            auto yy = ans[i].ss;
+            cout << xx << " " << yy << endl;
+        }
+    }
+    else
+    {
+
+        vector<pair<ll, ll>> ans1;
+        for (int i = 0; i < n; i++)
+        {
+            if (mn != a[i] && a[i] > 0)
+            {
+                ans1.pb({i + 1, mni});
+                a[i] += mn;
+            }
+        }
+        for (int i = n - 2; i >= 0; i--)
+        {
+            ans1.pb({i + 1, i + 2});
+        }
+        int sz1 = ans1.size();
+        cout << sz1 << endl;
+        temp++;
+        for (int i = 0; i < sz1; i++)
+        {
+            auto xx1 = ans1[i].ff;
+            auto yy1 = ans1[i].ss;
+            cout << xx1 << " " << yy1 << endl;
+        }
+    }
+}
+
+int main()
+{
+#ifndef ONLINE_JUDGE
+    freopen("input1.txt", "r", stdin);
+    freopen("output1.txt", "w", stdout);
+#endif
+    fastread();
+    int tt;
+
+    // // ll l, r;
+    cin >> tt;
+
+    while (tt--)
+    {
+
+        solve();
+    }
+
+    return 0;
+}
