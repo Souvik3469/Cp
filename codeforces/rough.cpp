@@ -141,44 +141,20 @@ bool ispal(string s)
     return true;
 }
 
-bool seive(int n)
+ll LIS(vector<ll> &nums)
 {
-    bool prime[n + 1];
-    memset(prime, true, sizeof(prime));
-
-    for (int p = 2; p * p <= n; p++)
-    {
-
-        if (prime[p] == true)
-        {
-
-            for (int i = p * p; i <= n; i += p)
-                prime[i] = false;
-        }
-    }
-    for (int p = 2; p <= n; p++)
-    {
-        if (prime[p])
-            return true;
-    }
-
-    return false;
-}
-
-int LIS(vector<int> &nums)
-{
-    vector<int> dp(nums.size(), 1);
-    for (int i = 0; i < nums.size(); i++)
-        for (int j = i - 1; j >= 0; j--)
+    vector<ll> dp(nums.size(), 1);
+    for (ll i = 0; i < nums.size(); i++)
+        for (ll j = i - 1; j >= 0; j--)
             if (nums[i] > nums[j])
                 dp[i] = max(dp[i], 1 + dp[j]);
     return *max_element(dp.begin(), dp.end());
 }
 
-bool ispv(vector<int> &a, int n)
+bool ispv(vector<ll> &a, ll n)
 {
 
-    for (int i = 1; i < n - 1; i++)
+    for (ll i = 1; i < n - 1; i++)
     {
         if (!((a[i - 1] < a[i] && a[i] > a[i + 1]) || (a[i - 1] > a[i] && a[i] < a[i + 1])))
         {
@@ -379,6 +355,19 @@ void solve()
     vector<ll> a(n);
     for (ll i = 0; i < n; i++)
         cin >> a[i];
+    vector<ll> v;
+    for (ll i = 1; i <= n; i++)
+    {
+        if (a[i - 1] != i)
+            v.pb(abs(i - a[i - 1]));
+    }
+    if (v.empty())
+    {
+        cout << 0 << endl;
+        return;
+    }
+    sort(v.begin(), v.end());
+    cout << v[0] << endl;
 }
 /*
    void dbg(){

@@ -141,44 +141,20 @@ bool ispal(string s)
     return true;
 }
 
-bool seive(int n)
+ll LIS(vector<ll> &nums)
 {
-    bool prime[n + 1];
-    memset(prime, true, sizeof(prime));
-
-    for (int p = 2; p * p <= n; p++)
-    {
-
-        if (prime[p] == true)
-        {
-
-            for (int i = p * p; i <= n; i += p)
-                prime[i] = false;
-        }
-    }
-    for (int p = 2; p <= n; p++)
-    {
-        if (prime[p])
-            return true;
-    }
-
-    return false;
-}
-
-int LIS(vector<int> &nums)
-{
-    vector<int> dp(nums.size(), 1);
-    for (int i = 0; i < nums.size(); i++)
-        for (int j = i - 1; j >= 0; j--)
+    vector<ll> dp(nums.size(), 1);
+    for (ll i = 0; i < nums.size(); i++)
+        for (ll j = i - 1; j >= 0; j--)
             if (nums[i] > nums[j])
                 dp[i] = max(dp[i], 1 + dp[j]);
     return *max_element(dp.begin(), dp.end());
 }
 
-bool ispv(vector<int> &a, int n)
+bool ispv(vector<ll> &a, ll n)
 {
 
-    for (int i = 1; i < n - 1; i++)
+    for (ll i = 1; i < n - 1; i++)
     {
         if (!((a[i - 1] < a[i] && a[i] > a[i + 1]) || (a[i - 1] > a[i] && a[i] < a[i + 1])))
         {
@@ -371,7 +347,17 @@ ll psum(ll l, ll r, vector<ll> &pr)
     }
     return pr[r] - pr[l - 1];
 }
-
+ll f(ll idx, ll n, ll s, ll ts, vector<ll> &a)
+{
+    if (idx == n)
+    {
+        ll rs = abs(ts - s);
+        return abs(rs - s);
+    }
+    ll t = f(idx + 1, n, s + a[idx], ts, a);
+    ll nt = f(idx + 1, n, s, ts, a);
+    return min(t, nt);
+}
 void solve()
 {
     ll n;
@@ -379,6 +365,10 @@ void solve()
     vector<ll> a(n);
     for (ll i = 0; i < n; i++)
         cin >> a[i];
+
+    ll ts = accumulate(a.begin(), a.end(), 0LL);
+
+    cout << f(0, n, 0, ts, a) << endl;
 }
 /*
    void dbg(){
@@ -418,7 +408,7 @@ signed main()
     // pr(n);
     // cout<<primes[n]<<endl;
 
-    cin >> tt;
+    // cin >> tt;
 
     // while (tt--)
     // {
@@ -427,11 +417,11 @@ signed main()
     // }
     // dbg();
 
-    for (int i = 1; i <= tt; i++)
-    {
-        // cout << "Case #" << i << ": ";
-        solve();
-    }
+    // for (int i = 1; i <= tt; i++)
+    // {
+    // cout << "Case #" << i << ": ";
+    solve();
+    // }
 
     return 0;
 }
