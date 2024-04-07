@@ -432,13 +432,59 @@ ll psum(ll l, ll r, vector<ll> &pr)
 
 void solve()
 {
-    string s;
-    string t;
-    cin >> s >> t;
-    ll ans1 = compute_hash(s);
-    ll ans2 = compute_hash1(s);
-    debug(ans1);
-    debug(ans2);
+    ll n;
+    cin >> n;
+    vector<ll> a(n);
+    for (ll i = 0; i < n; i++)
+        cin >> a[i];
+
+    const ll mxn = 1e6 + 5;
+    vector<ll> m(mxn + 1);
+    vector<ll> f(mxn + 1);
+    vector<ll> vis(mxn + 1);
+    vector<ll> use(mxn + 1, 1);
+    for (auto x : a)
+        m[x]++;
+    for (ll i = 2; i < mxn; i++)
+    {
+        //  m[i]=1;
+        for (ll j = 2 * i; j < mxn; j += i)
+        {
+            m[i] += m[j];
+        }
+    }
+
+    for (ll i = 2; i < mxn; i++)
+    {
+        if (!vis[i])
+        {
+            for (ll j = i; j < mxn; j += i)
+            {
+                vis[j] = 1;
+                f[j]++;
+                if ((j % (i * i)) == 0)
+                    use[j] = 0;
+            }
+        }
+    }
+
+    ll ans = 0LL;
+    for (ll i = 2; i < mxn; i++)
+    {
+        if (use[i])
+        {
+            if (m[i] == 0)
+                continue;
+            if (f[i] % 2 == 1)
+                ans += ((ll)m[i] * (m[i] - 1)) / 2;
+            else
+                ans -= ((ll)m[i] * (m[i] - 1)) / 2;
+        }
+    }
+    ans = (((ll)n * (n - 1)) / 2) - ans;
+    cout << ans << endl;
+
+    // debugv(m);
 }
 /*
    void dbg(){
@@ -482,7 +528,7 @@ signed main()
     //     if(primes[i])v.pb(i);
     // }
 
-    cin >> tt;
+    // cin >> tt;
 
     // while (tt--)
     // {
@@ -491,11 +537,11 @@ signed main()
     // }
     // dbg();
 
-    for (int i = 1; i <= tt; i++)
-    {
-        // cout << "Case #" << i << ": ";
-        solve();
-    }
+    // for (int i = 1; i <= tt; i++)
+    //{
+    //  cout << "Case #" << i << ": ";
+    solve();
+    // }
 
     return 0;
 }
