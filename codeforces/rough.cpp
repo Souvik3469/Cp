@@ -164,7 +164,16 @@ vector<ll> rabin_karp1(string const &s, string const &t)
     }
     return occurrences;
 }
-
+ll compute_hash2(string &s){
+    ll ans = 0;
+    ll pr = 1;
+    ll m=1e9+9;
+    for(ll i = 0; i < s.size(); i++){
+        ans = (ans + ((s[i] - 'a'+ 1ll) * pr) % m) % m;
+        pr = (pr * 31ll) % m;
+    }
+    return ans;
+}
 /************************************/
 bool iss(char ch)
 {
@@ -281,23 +290,7 @@ ll modmul(ll a, ll b, ll p)
     return ((a % p) * (b % p)) % p;
 }
 
-ll modinv(ll a, ll p)
-{
-    // Calculate modular inverse of a
-    ll b = p, u = 1, v = 0;
-    while (b)
-    {
-        ll t = a / b;
-        a -= t * b;
-        swap(a, b);
-        u -= t * v;
-        swap(u, v);
-    }
-    u %= p;
-    if (u < 0)
-        u += p;
-    return u;
-}
+
 ll modpow(ll x, ll y, ll p)
 {
     ll res = 1;
@@ -317,6 +310,12 @@ ll modpow(ll x, ll y, ll p)
         x = (1LL * x * x) % p;
     }
     return res;
+}
+
+ll modinv(ll a, ll p)
+{
+   return modpow(a,p-2,p);
+    
 }
 ll modfact(ll n, ll p)
 {
@@ -396,9 +395,9 @@ void pr(ll n)
 //     return prev_val[idx]=val;
 // }
 
-void rotatematrix(vector<vector<ll>> &a, ll n)
+void rotatematrix(vector<vector<ll>> &a)
 {
-    // ll n=a.size();
+    ll n=a.size();
 
     for (ll i = 0; i < n / 2; i++)
     {
@@ -430,15 +429,71 @@ ll psum(ll l, ll r, vector<ll> &pr)
     return pr[r] - pr[l - 1];
 }
 
+bool pos(string &s,ll l){
+    string p=s.substr(0,l);
+    ll pl=l;
+    ll sl=s.length();
+    ll ph=compute_hash2(p);
+    string t=s.substr(0,pl);
+    ll sh=compute_hash2(t);
+    ll c=0;
+//   debug(ph);
+//   debug(sh);
+    c++;
+    ll m=1e9+9;
+    ll prl=1;
+    ll prr=modpow(31LL,pl,m);
+    
+    for(ll i=pl;i<sl;i++){
+        sh=(sh-((s[i-pl]-'a'+1)*prl)%m+m)%m;
+        sh=(sh+((s[i]-'a'+1)*prr)%m)%m;
+        ph=(ph*31LL)%m;
+        if(sh==ph)c++;
+        prl=(prl*31LL)%m;
+        prr=(prr*31LL)%m;
+    }
+    return (c>2);
+    
+    
+}
 void solve()
 {
-    string s;
-    string t;
-    cin >> s >> t;
-    ll ans1 = compute_hash(s);
-    ll ans2 = compute_hash1(s);
-    debug(ans1);
-    debug(ans2);
+  string s;
+  cin>>s;
+  ll n=s.size();
+ll p=1LL;
+  
+    vector<ll>h(n);
+      ll h1=0LL;
+    ll m = 1e9 + 9;
+    for (ll i = 0; i < n; i++){
+        h1 = (h1  + ((s[i] - 'a' + 1)*p)%m) % m;
+        p=(p*31LL)%m;
+        h[i]=h1;
+    }
+        h1=0LL;
+      
+        vector<ll>v;
+        for (ll i = n-1; i >=0; i--){
+            h1=(h1*31LL)%m;
+           h1 = (h1 + (s[i] - 'a' + 1)) % m;  
+           if(h1==h[n-i-1])v.pb(n-i-1);
+        }
+        ll x=v.size();
+        
+       // debugv(v);
+       
+       ll st=0;
+       ll en=x-1;
+       
+       while(st<=en){
+           ll mid=st+(en-st)/2;
+           
+           if(pos(s,v[mid]+1))st=mid+1;
+           else en=mid-1;
+       }
+       if(en<0)cout<<"Just a legend"<<endl;
+       else cout<<s.substr(0,v[en]+1)<<endl;
 }
 /*
    void dbg(){
@@ -482,7 +537,7 @@ signed main()
     //     if(primes[i])v.pb(i);
     // }
 
-    cin >> tt;
+   // cin >> tt;
 
     // while (tt--)
     // {
@@ -491,11 +546,11 @@ signed main()
     // }
     // dbg();
 
-    for (int i = 1; i <= tt; i++)
-    {
+   // for (int i = 1; i <= tt; i++)
+  //  {
         // cout << "Case #" << i << ": ";
         solve();
-    }
+   // }
 
     return 0;
 }
